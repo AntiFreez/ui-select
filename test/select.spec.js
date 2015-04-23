@@ -1563,6 +1563,24 @@ describe('ui-select tests', function() {
 
     });
 
+    it('should parse the items correctly using single property binding and track by expression', function() {
+
+      scope.selection.selectedMultiple = ['wladimir@email.com', 'samantha@email.com'];
+
+      var el = compileTemplate(
+          '<ui-select multiple ng-model="selection.selectedMultiple" theme="bootstrap" style="width: 800px;"> \
+              <ui-select-match placeholder="Pick one...">{{$item.name}} &lt;{{$item.email}}&gt;</ui-select-match> \
+              <ui-select-choices repeat="person.email as person in people | filter: $select.search track by person.name"> \
+                <div ng-bind-html="person.name | highlight: $select.search"></div> \
+                <div ng-bind-html="person.email | highlight: $select.search"></div> \
+              </ui-select-choices> \
+          </ui-select>'
+      );
+
+      expect(el.scope().$select.selected).toEqual([scope.people[4], scope.people[5]]);
+
+    });
+
     it('should add selected match to selection array using single property binding', function() {
 
       scope.selection.selectedMultiple = ['wladimir@email.com', 'samantha@email.com'];
